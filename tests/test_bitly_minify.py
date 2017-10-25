@@ -6,6 +6,8 @@ BITLY_ACCESS_TOKEN = '948f673940a8a91636dbb980d2e6be3060920465'
 
 class TestBitly(unittest.TestCase):
 
+    test_url = "http://micropyramid.com/"
+
     def get_bitly(self):
         bitly = bitlyapi(BITLY_ACCESS_TOKEN)
         return bitly
@@ -16,49 +18,48 @@ class TestBitly(unittest.TestCase):
 
     def test_shorturl(self):
         bitly = self.get_bitly()
-        url = "http://micropyramid.com"
-        domain = "mp.com"
-        bitly.shorturl(url=url, preferred_domain=domain)
-        # self.assertTrue(short_url)
+        domain = "j.mp"
+        response = bitly.shorturl(url=self.test_url, preferred_domain=domain)
+        short_url = response.get('url')
+        assert short_url.startswith('http://' + domain + '/')
 
     def test_expand(self):
         bitly = self.get_bitly()
-        url = "http://micropyramid.com"
-        short_url = bitly.shorturl(url=url)
-        self.assertTrue(short_url)
+        response = bitly.shorturl(url=self.test_url)
+        self.assertTrue(response)
+        short_url = response.get('url')
+
+        response = bitly.expand(short_url)
+        expanded_url = response['expand'][0]['long_url']
+        self.assertEqual(expanded_url, self.test_url)
 
     def test_url_info(self):
         bitly = self.get_bitly()
-        url = "http://micropyramid.com"
-        short_url = bitly.url_info(url=url)
+        short_url = bitly.url_info(url=self.test_url)
         self.assertTrue(short_url)
 
     def test_link_lookup(self):
         bitly = self.get_bitly()
-        url = "http://micropyramid.com"
-        short_url = bitly.link_lookup(url=url)
+        short_url = bitly.link_lookup(url=self.test_url)
         self.assertTrue(short_url)
 
     def test_link_edit(self):
         bitly = self.get_bitly()
-        url = "http://micropyramid.com"
-        short_url = bitly.link_lookup(url=url)
+        short_url = bitly.link_lookup(url=self.test_url)
         self.assertTrue(short_url)
 
     def test_user_link_lookup(self):
         bitly = self.get_bitly()
-        url = "http://micropyramid.com"
-        short_url = bitly.user_link_lookup(url=url)
+        short_url = bitly.user_link_lookup(url=self.test_url)
         self.assertTrue(short_url)
 
     def test_user_link_save(self):
         bitly = self.get_bitly()
-        url = "http://micropyramid.com"
         title = "micropyramid"
         note = "Pyhon devlopment"
         private = "only organization"
         ts = 'tech'
-        result = bitly.user_link_save(longUrl=url,
+        result = bitly.user_link_save(longUrl=self.test_url,
                                       title=title,
                                       note=note,
                                       private=private,

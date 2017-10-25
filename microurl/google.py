@@ -8,9 +8,9 @@ def google_mini(url, Google_API_KEY):
     payload = {'longUrl': url}
     headers = {'content-type': 'application/json'}
     r = requests.post(post_url, data=json.dumps(payload), headers=headers)
-    if r.status_code == 200:
+    if r.status_code == requests.codes.ok:
         return r.json().get('id')
-    elif r.status_code == 400:
+    elif r.status_code == requests.codes.bad_request:
         raise KeyError('Can not generate minified url, Reason:', r.json().get('error', {}).get('errors')[0].get('reason'))
     raise KeyError('Invalid Google Api Key or url')
 
@@ -28,4 +28,3 @@ def google_expand(short_url, Google_API_KEY):
 
 def qrcode(url):
     return 'http://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=' + url
-
