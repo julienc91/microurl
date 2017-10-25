@@ -34,7 +34,3 @@ class TestMinifyAndExpand(unittest.TestCase):
 
         expanded_url = google_expand(minified_url, GOOGLE_API_KEY)
         self.assertEqual(test_url, expanded_url)
-
-
-if __name__ == '__main__':
-    unittest.main()

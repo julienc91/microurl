@@ -69,8 +69,3 @@ class TestBitly(unittest.TestCase):
         bitly = self.get_bitly()
         result = bitly.link_info("http://kjlssjd1sd.com")
         self.assertFalse(result)
-
-
-
-if __name__ == '__main__':
-    unittest.main()
